@@ -1,0 +1,1 @@
+{"name":"ai-crm","private":true,"scripts":{"dev":"npx vite"},"dependencies":{"react":"^18.2.0","react-dom":"^18.2.0","axios":"^1.6.0"},"devDependencies":{"vite":"^5.0.0"}}

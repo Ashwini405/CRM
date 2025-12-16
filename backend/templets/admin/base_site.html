@@ -1,0 +1,11 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block branding %}
+<h1 id="site-name" style="display:flex;align-items:center;">
+   <img src="{% static 'admin/img/sepnoty_logo.png' %}"
+     alt="Sepnoty Logo"
+     style="height:40px;margin-right:12px;" />
+    <span>Sepnoty Administration</span>
+</h1>
+{% endblock %}
