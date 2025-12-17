@@ -1,112 +1,89 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-
-// export default function CreateLead({ onCreated }) {
-//   const [name, setName] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [phone, setPhone] = useState("");
-
-//   const submitLead = async (e) => {
-//     e.preventDefault();
-//     const token = localStorage.getItem("token");
-
-//     await axios.post(
-//       "http://127.0.0.1:8000/api/leads/",
-//       { name, email, phone },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-
-//     setName("");
-//     setEmail("");
-//     setPhone("");
-//     onCreated();
-//   };
-
-//   return (
-//     <form onSubmit={submitLead} className="bg-white p-4 rounded shadow mb-6">
-//       <h2 className="text-lg font-bold mb-3">Add Lead</h2>
-
-//       <input className="border p-2 w-full mb-2"
-//         placeholder="Name" value={name}
-//         onChange={(e) => setName(e.target.value)} />
-
-//       <input className="border p-2 w-full mb-2"
-//         placeholder="Email" value={email}
-//         onChange={(e) => setEmail(e.target.value)} />
-
-//       <input className="border p-2 w-full mb-3"
-//         placeholder="Phone" value={phone}
-//         onChange={(e) => setPhone(e.target.value)} />
-
-//       <button className="bg-blue-600 text-white px-4 py-2 rounded">
-//         Create Lead
-//       </button>
-//     </form>
-//   );
-// }
 import React, { useState } from "react";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 export default function CreateLead({ onCreated }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitLead = async () => {
-    const token = localStorage.getItem("token");
+    if (!name || !email || !phone) {
+      alert("Please fill all fields");
+      return;
+    }
 
-    await axios.post(
-      "http://127.0.0.1:8000/api/leads/",
-      { name, email, phone },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    try {
+      setLoading(true);
+      const token = localStorage.getItem("token");
 
-    setName("");
-    setEmail("");
-    setPhone("");
+      await axios.post(
+        "http://127.0.0.1:8000/api/leads/",
+        { name, email, phone },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    onCreated();
+      setName("");
+      setEmail("");
+      setPhone("");
+      onCreated();
+    } catch (error) {
+      alert("Failed to create lead");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow mb-6">
-      <h2 className="text-lg font-bold mb-3">Add Lead</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="bg-white p-6 rounded-2xl shadow-md mb-6"
+    >
+      <h2 className="text-xl font-bold mb-4 text-gray-800">
+        Add Lead
+      </h2>
 
       <input
-        className="w-full border p-2 mb-2"
-        placeholder="Name"
+        className="w-full mb-3 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+        placeholder="Full Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
 
       <input
-        className="w-full border p-2 mb-2"
-        placeholder="Email"
+        className="w-full mb-3 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+        placeholder="Email Address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
-        className="w-full border p-2 mb-3"
-        placeholder="Phone"
+        className="w-full mb-4 px-4 py-3 border rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
+        placeholder="Phone Number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
       />
 
       <button
         onClick={submitLead}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        disabled={loading}
+        className={`w-full text-white font-semibold px-4 py-2 rounded-xl shadow transition transform
+          ${
+            loading
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:scale-[1.03]"
+          }`}
       >
-        Create Lead
+        {loading ? "Creating..." : "Create Lead"}
       </button>
-    </div>
+    </motion.div>
   );
 }
