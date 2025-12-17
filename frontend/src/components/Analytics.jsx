@@ -26,7 +26,7 @@ export default function Analytics({ leads }) {
         Lead Analytics
       </h2>
 
-      {/* Stats */}
+      
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="bg-green-100 text-green-700 p-4 rounded text-center">
           <p className="text-sm">Hot Leads</p>
@@ -44,7 +44,7 @@ export default function Analytics({ leads }) {
         </div>
       </div>
 
-      {/* Chart */}
+    
       <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
